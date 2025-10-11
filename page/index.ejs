@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node-Lesson</title>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <% if(created){ %>
+    <p>Заметка создана</p>
+    <%}%>
+    <form action="/" method="POST">
+      <input
+        type="text"
+        name="title"
+        placeholder="Введите заголовок"
+        required
+      />
+      <button type="submit">Сохранить</button>
+    </form>
+    <div class="notes">
+      <% if (notes.length > 0) { %>
+      <div>
+        <% for(let note = 0; note < notes.length; note++) { %>
+        <div><%= notes[note].title %></div>
+        <button type="button" data-type="edit" data-id="<%= notes[note].id %>">
+          edit
+        </button>
+        <button
+          type="button"
+          data-type="delete"
+          data-id="<%= notes[note].id %>"
+        >
+          Удалить
+        </button>
+        <% } %>
+      </div>
+      <% } else { %>
+      <p>Заметок нет</p>
+      <% } %>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>
