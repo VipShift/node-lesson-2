@@ -1,45 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Node-Lesson</title>
+    <title><%= title %></title>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <% if(created){ %>
-    <p>Заметка создана</p>
-    <%}%>
-    <form action="/" method="POST">
-      <input
-        type="text"
-        name="title"
-        placeholder="Введите заголовок"
-        required
-      />
+    <h1>Заметки</h1>
+
+    <form id="note-form">
+      <input type="text" id="title" placeholder="Введите заголовок" required />
       <button type="submit">Сохранить</button>
     </form>
+
+    <hr />
+
     <div class="notes">
-      <% if (notes.length > 0) { %>
+      <% if (notes.length > 0) { %> <% notes.forEach(note => { %>
       <div>
-        <% for(let note = 0; note < notes.length; note++) { %>
-        <div><%= notes[note].title %></div>
-        <button type="button" data-type="edit" data-id="<%= notes[note].id %>">
-          edit
-        </button>
-        <button
-          type="button"
-          data-type="delete"
-          data-id="<%= notes[note].id %>"
-        >
-          Удалить
-        </button>
-        <% } %>
+        <strong><%= note.title %></strong>
+        <button data-type="edit" data-id="<%= note._id %>">✏️</button>
+        <button data-type="delete" data-id="<%= note._id %>">🗑️</button>
       </div>
-      <% } else { %>
-      <p>Заметок нет</p>
+      <% }) %> <% } else { %>
+      <p>Пока нет заметок.</p>
       <% } %>
     </div>
+
+    <script src="/form.js"></script>
     <script src="/app.js"></script>
   </body>
 </html>
