@@ -1,6 +1,10 @@
 document.addEventListener('click', async (event) => {
-  if (event.target.dataset.type === 'delete') {
-    const id = event.target.dataset.id
+  const button = event.target.closest('button[data-type]')
+  if (!button) return  
+
+  const { type, id } = button.dataset
+
+  if (type === 'delete') {
     try {
       await deleteNote(id)
       window.location.href = '/?deleted=true'
@@ -8,35 +12,32 @@ document.addEventListener('click', async (event) => {
       console.error('Error deleting note:', error)
     }
   }
+
+  if (type === 'edit') {
+    const newTitle = prompt('Введите новый заголовок')
+    if (!newTitle || newTitle.trim() === '') return
+    try {
+      const data = await editNote(id, newTitle)
+      window.location.href = '/?edited=true'
+    } catch (error) {
+      console.error('Error editing note:', error)
+    }
+  }
 })
+
+
+
 
 async function deleteNote(id) {
   try {
     const response = await fetch(`/${id}`, { method: 'DELETE' })
-    if (!response.ok) {
-      throw new Error('Failed to delete note')
-    }
+    if (!response.ok) throw new Error('Failed to delete note')
     return response.json()
   } catch (error) {
     console.error('Error deleting note:', error)
     throw error
   }
 }
-
-document.addEventListener('click', async (event) => {
-  if (event.target.dataset.type === 'edit') {
-    const id = event.target.dataset.id
-    const newTitle = prompt('Введите новый заголовок')
-    if (newTitle && newTitle.trim() !== '') {
-      try {
-        await editNote(id, newTitle)
-        window.location.href = '/?edited=true'
-      } catch (error) {
-        console.error('Error editing note:', error)
-      }
-    }
-  }
-})
 
 async function editNote(id, newTitle) {
   try {
@@ -45,9 +46,9 @@ async function editNote(id, newTitle) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: newTitle }),
     })
-    if (!response.ok) {
-      throw new Error('Failed to update note')
-    }
+
+    if (!response.ok) throw new Error('Failed to update note')
+
     return response.json()
   } catch (error) {
     console.error('Error editing note:', error)

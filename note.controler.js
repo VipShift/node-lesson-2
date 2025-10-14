@@ -36,15 +36,21 @@ async function deleteNote(id) {
 
 async function editNote(id, title) {
   try {
-    const result = await Note.updateOne({ _id: id }, { title: title })
-    if (result.matchedCount === 0) {
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      { title: title },
+      { new: true }  
+    )
+    if (!updatedNote) {
       throw new Error('Note not found')
     }
     console.log(chalk.green('Note edited'))
+    return updatedNote  
   } catch (error) {
     console.error(chalk.red('Error editing note:'), error)
     throw error
   }
 }
+
 
 module.exports = { addNote, getNotes, deleteNote, editNote }

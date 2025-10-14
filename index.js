@@ -2,7 +2,7 @@ const path = require('path')
 const chalk = require('chalk')
 const express = require('express')
 const mongoose = require('mongoose')
-const { addNote, getNotes, deleteNote, editNote } = require('./note.actions')
+const { addNote, getNotes, deleteNote, editNote } = require('./note.controler')
 
 const port = 3000
 const app = express()
@@ -52,13 +52,14 @@ app.delete('/:id', async (req, res) => {
 
 app.put('/:id', async (req, res) => {
   try {
-    await editNote(req.params.id, req.body.title)
-    res.json({ success: true })
+    const updatedNote = await editNote(req.params.id, req.body.title)
+    res.json({ success: true, note: updatedNote }) 
   } catch (error) {
     console.log(error)
     res.status(500).json({ success: false, message: error.message })
   }
 })
+
 
 mongoose
   .connect(
@@ -66,6 +67,6 @@ mongoose
   )
   .then(() => {
     app.listen(port, () => {
-      console.log(chalk.green(`✅ Server running at http://localhost:${port}`))
+      console.log(chalk.bgGreen(`✅ Server running at http://localhost:${port}`))
     })
   })
