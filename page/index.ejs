@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
   </head>
+
   <body>
+    <button><a href="/logout">Logout</a></button>
     <h1>Заметки</h1>
 
     <form id="note-form">
@@ -18,11 +20,18 @@
     <div class="notes">
       <% if (notes.length > 0) { %> <% notes.forEach(note => { %>
       <div class="note" data-id="<%= note._id %>">
-        <strong class=".note-title"><%= note.title %></strong>
+        <strong class="note-title"><%= note.title %></strong>
+        <br />
+        <strong class="note-title">owner: <%= note.owner %></strong>
+        <br />
+        <% if (note.owner === userEmail) { %>
         <button data-type="edit" data-id="<%= note._id %>">✏️</button>
         <button data-type="delete" data-id="<%= note._id %>">🗑️</button>
+        <% } %>
+        <hr />
       </div>
-      <% }) %> <% } else { %>
+      <% }) %>
+      <% } else { %>
       <p>Пока нет заметок.</p>
       <% } %>
     </div>

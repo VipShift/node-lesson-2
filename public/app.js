@@ -1,6 +1,6 @@
-document.addEventListener('click', async (event) => {
+document.addEventListener('click', async event => {
   const button = event.target.closest('button[data-type]')
-  if (!button) return  
+  if (!button) return
 
   const { type, id } = button.dataset
 
@@ -17,16 +17,14 @@ document.addEventListener('click', async (event) => {
     const newTitle = prompt('Введите новый заголовок')
     if (!newTitle || newTitle.trim() === '') return
     try {
-      const data = await editNote(id, newTitle)
+      await editNote(id, newTitle)
       window.location.href = '/?edited=true'
     } catch (error) {
       console.error('Error editing note:', error)
+      throw error
     }
   }
 })
-
-
-
 
 async function deleteNote(id) {
   try {
